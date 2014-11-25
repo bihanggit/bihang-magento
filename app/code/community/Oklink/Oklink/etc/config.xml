@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Oklink_Oklink>
+            <version>1.0</version>
+        </Oklink_Oklink>
+    </modules>
+	<frontend>
+        <routers>
+            <oklink_oklink>
+                <use>standard</use>
+                <args>
+                    <module>Oklink_Oklink</module>
+                    <frontName>oklink_oklink</frontName>
+                </args>
+            </oklink_oklink>
+        </routers>
+    </frontend>
+    <global>
+        <blocks>
+            <Oklink>
+                <class>Oklink_Oklink_Block</class>
+            </Oklink>
+        </blocks>
+ 
+        <models>
+            <Oklink>
+                <class>Oklink_Oklink_Model</class>
+            </Oklink>
+        </models>
+ 
+        <resources>
+            <Oklink_setup>
+                <setup>
+                    <module>Oklink_Oklink</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </Oklink_setup>
+            <Oklink_write>
+                <connection>
+                  <use>core_write</use>
+                </connection>
+            </Oklink_write>
+            <Oklink_read>
+               <connection>
+                <use>core_read</use>
+              </connection>
+            </Oklink_read>
+        </resources>
+    </global>
+ 
+    <default>
+        <payment>
+            <Oklink>
+                <active>1</active>
+                <model>Oklink/paymentMethod</model>
+                <title>Bitcoin</title>
+ 
+                <payment_action>authorize</payment_action>
+                <callback_secret>generate</callback_secret>
+            </Oklink>
+         </payment>
+    </default>
+</config>
