@@ -16,7 +16,7 @@ class Oklink_Oklink_CallbackController extends Mage_Core_Controller_Front_Action
       $apiKey = Mage::getStoreConfig('payment/Oklink/api_key');
       $apiSecret = Mage::getStoreConfig('payment/Oklink/api_secret');
       $client = Oklink::withApiKey($apiKey, $apiSecret);
-      $cbOrderId = $postBody->order->id;
+      $cbOrderId = $postBody->id;
       $orderInfo = $client->detailOrder($cbOrderId);
       if(!$orderInfo) {
         Mage::log("Oklink: incorrect callback with incorrect Oklink order ID $cbOrderId.");
@@ -54,7 +54,7 @@ class Oklink_Oklink_CallbackController extends Mage_Core_Controller_Front_Action
         $order->registerCancellation("Oklink order $cbOrderId cancelled: $cancelReason");
       }
 
-      Mage::dispatchEvent('coinbase_callback_received', array('status' => $orderInfo->status, 'order_id' => $orderId));
+      Mage::dispatchEvent('oklink_callback_received', array('status' => $orderInfo->status, 'order_id' => $orderId));
       $order->save();
     }
 

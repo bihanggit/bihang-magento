@@ -96,6 +96,7 @@ class Oklink_Oklink_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             'name' => 'Order #' . $order['increment_id'],
             'price' => $amount,
             'price_currency' => $currency,
+            'custom'  => $order['increment_id'],
             'callback_url' => Mage::getUrl('oklink_oklink'). 'callback/callback/?secret=' . $callbackSecret,
             'success_url' => $successUrl,
           );
