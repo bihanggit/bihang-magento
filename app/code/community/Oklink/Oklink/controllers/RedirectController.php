@@ -1,6 +1,6 @@
 <?php
 
-class Coinbase_Coinbase_RedirectController extends Mage_Core_Controller_Front_Action
+class Oklink_Oklink_RedirectController extends Mage_Core_Controller_Front_Action
 {        
 
     public function successAction() {
@@ -20,7 +20,7 @@ class Coinbase_Coinbase_RedirectController extends Mage_Core_Controller_Front_Ac
         
         $msg = "Your order has been cancelled.";
         $order->registerCancellation("Order was cancelled during checkout.")->save();
-        Mage::dispatchEvent('coinbase_order_cancelled', array('order_id' => $orderId));
+        Mage::dispatchEvent('oklink_order_cancelled', array('order_id' => $orderId));
       }
       
       Mage::getSingleton('core/session')->addError($msg);
