@@ -8,7 +8,8 @@ class Oklink_Oklink_CallbackController extends Mage_Core_Controller_Front_Action
       require_once(Mage::getModuleDir('oklink-php', 'Oklink_Oklink') . "/oklink-php/Oklink.php");
       
       $secret = $_REQUEST['secret'];
-      $postBody = json_decode(file_get_contents('php://input'));
+
+      $oklink_order = json_decode(file_get_contents('php://input'));
       $correctSecret = Mage::getStoreConfig('payment/Oklink/callback_secret');
 
       // To verify this callback is legitimate, we will:
@@ -16,16 +17,15 @@ class Oklink_Oklink_CallbackController extends Mage_Core_Controller_Front_Action
       $apiKey = Mage::getStoreConfig('payment/Oklink/api_key');
       $apiSecret = Mage::getStoreConfig('payment/Oklink/api_secret');
       $client = Oklink::withApiKey($apiKey, $apiSecret);
-      $cbOrderId = $postBody->id;
-      $orderInfo = $client->detailOrder($cbOrderId);
-      if(!$orderInfo) {
-        Mage::log("Oklink: incorrect callback with incorrect Oklink order ID $cbOrderId.");
+      $orderId = $oklink_order->custom;
+      $okOrderId = $oklink_order->id;
+
+      if(!$client->checkCallback()) {
+        Mage::log("Oklink: incorrect callback signture.");
         header("HTTP/1.1 500 Internal Server Error");
         return;
       }
       
-      //   b) using the verified order information, check which order the transaction was for using the custom param.
-      $orderId = $orderInfo->id;
       $order = Mage::getModel('sales/order')->load($orderId);
       if(!$order) {
         Mage::log("Oklink: incorrect callback with incorrect order ID $orderId.");
@@ -33,7 +33,6 @@ class Oklink_Oklink_CallbackController extends Mage_Core_Controller_Front_Action
         return;
       }
       
-      //   c) check the secret URL parameter.
       if($secret !== $correctSecret) {
         Mage::log("Oklink: incorrect callback with incorrect secret parameter $secret.");
         header("HTTP/1.1 500 Internal Server Error");
@@ -42,19 +41,17 @@ class Oklink_Oklink_CallbackController extends Mage_Core_Controller_Front_Action
 
       // The callback is legitimate. Update the order's status in the database.
       $payment = $order->getPayment();
-      $payment->setTransactionId($cbOrderId)
-        ->setPreparedMessage("Paid with Oklink order $cbOrderId.")
+
+      $payment->setTransactionId($okOrderId)
+        ->setPreparedMessage("Paid with Oklink order $okOrderId.")
         ->setShouldCloseParentTransaction(true)
         ->setIsTransactionClosed(0);
-        
-      if("completed" == $orderInfo->status) {
-        $payment->registerCaptureNotification($orderInfo->total_native->cents / 100);
+      if("completed" == $oklink_order->status) {
+        $payment->registerCaptureNotification($oklink_order->total_native->amount);
       } else {
-        $cancelReason = $postBody->cancellation_reason;
-        $order->registerCancellation("Oklink order $cbOrderId cancelled: $cancelReason");
+        $order->registerCancellation("Oklink order $okOrderId cancelled");
       }
-
-      Mage::dispatchEvent('oklink_callback_received', array('status' => $orderInfo->status, 'order_id' => $orderId));
+      Mage::dispatchEvent('oklink_callback_received', array('status' => $oklink_order->status, 'order_id' => $orderId));
       $order->save();
     }
 
