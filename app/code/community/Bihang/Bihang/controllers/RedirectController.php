@@ -1,6 +1,6 @@
 <?php
 
-class Oklink_Oklink_RedirectController extends Mage_Core_Controller_Front_Action
+class Bihang_Bihang_RedirectController extends Mage_Core_Controller_Front_Action
 {        
 
     public function successAction() {
@@ -20,7 +20,7 @@ class Oklink_Oklink_RedirectController extends Mage_Core_Controller_Front_Action
         
         $msg = "Your order has been cancelled.";
         $order->registerCancellation("Order was cancelled during checkout.")->save();
-        Mage::dispatchEvent('oklink_order_cancelled', array('order_id' => $orderId));
+        Mage::dispatchEvent('bihang_order_cancelled', array('order_id' => $orderId));
       }
       
       Mage::getSingleton('core/session')->addError($msg);

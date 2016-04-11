@@ -1,66 +1,66 @@
 <?xml version="1.0"?>
 <config>
     <modules>
-        <Oklink_Oklink>
+        <Bihang_Bihang>
             <version>1.0</version>
-        </Oklink_Oklink>
+        </Bihang_Bihang>
     </modules>
 	<frontend>
         <routers>
-            <oklink_oklink>
+            <bihang_bihang>
                 <use>standard</use>
                 <args>
-                    <module>Oklink_Oklink</module>
-                    <frontName>oklink_oklink</frontName>
+                    <module>Bihang_Bihang</module>
+                    <frontName>bihang_bihang</frontName>
                 </args>
-            </oklink_oklink>
+            </bihang_bihang>
         </routers>
     </frontend>
     <global>
         <blocks>
-            <Oklink>
-                <class>Oklink_Oklink_Block</class>
-            </Oklink>
+            <Bihang>
+                <class>Bihang_Bihang_Block</class>
+            </Bihang>
         </blocks>
  
         <models>
-            <Oklink>
-                <class>Oklink_Oklink_Model</class>
-            </Oklink>
+            <Bihang>
+                <class>Bihang_Bihang_Model</class>
+            </Bihang>
         </models>
  
         <resources>
-            <Oklink_setup>
+            <Bihang_setup>
                 <setup>
-                    <module>Oklink_Oklink</module>
+                    <module>Bihang_Bihang</module>
                 </setup>
                 <connection>
                     <use>core_setup</use>
                 </connection>
-            </Oklink_setup>
-            <Oklink_write>
+            </Bihang_setup>
+            <Bihang_write>
                 <connection>
                   <use>core_write</use>
                 </connection>
-            </Oklink_write>
-            <Oklink_read>
+            </Bihang_write>
+            <Bihang_read>
                <connection>
                 <use>core_read</use>
               </connection>
-            </Oklink_read>
+            </Bihang_read>
         </resources>
     </global>
  
     <default>
         <payment>
-            <Oklink>
+            <Bihang>
                 <active>1</active>
-                <model>Oklink/paymentMethod</model>
+                <model>Bihang/paymentMethod</model>
                 <title>Bitcoin</title>
  
                 <payment_action>authorize</payment_action>
                 <callback_secret>generate</callback_secret>
-            </Oklink>
+            </Bihang>
          </payment>
     </default>
 </config>

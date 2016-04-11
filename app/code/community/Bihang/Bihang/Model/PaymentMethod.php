@@ -1,8 +1,8 @@
 <?php
  
-class Oklink_Oklink_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
+class Bihang_Bihang_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
 {
-    protected $_code = 'Oklink';
+    protected $_code = 'Bihang';
  
     /**
      * Is this payment method a gateway (online auth/charge) ?
@@ -58,36 +58,36 @@ class Oklink_Oklink_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     public function authorize(Varien_Object $payment, $amount) 
     {
 
-      require_once(Mage::getModuleDir('oklink-php', 'Oklink_Oklink') . "/oklink-php/Oklink.php");
+      require_once(Mage::getModuleDir('bihang-php', 'Bihang_Bihang') . "/bihang-php/Bihang.php");
 
-      // Step 1: Use the Oklink API to create redirect URL.
-      $apiKey = Mage::getStoreConfig('payment/Oklink/api_key');
-      $apiSecret = Mage::getStoreConfig('payment/Oklink/api_secret');
+      // Step 1: Use the Bihang API to create redirect URL.
+      $apiKey = Mage::getStoreConfig('payment/Bihang/api_key');
+      $apiSecret = Mage::getStoreConfig('payment/Bihang/api_secret');
 
       if($apiKey == null || $apiSecret == null) {
-        throw new Exception("Before using the Oklink plugin, you need to enter an API Key and Secret in Magento Admin > Configuration > System > Payment Methods > Oklink.");
+        throw new Exception("Before using the Bihang plugin, you need to enter an API Key and Secret in Magento Admin > Configuration > System > Payment Methods > Bihang.");
       }
 
-      $client = Oklink::withApiKey($apiKey, $apiSecret);
+      $client = Bihang::withApiKey($apiKey, $apiSecret);
 
       $order = $payment->getOrder();
       $currency = $order->getBaseCurrencyCode();
 
-      $callbackSecret = Mage::getStoreConfig('payment/Oklink/callback_secret');
+      $callbackSecret = Mage::getStoreConfig('payment/Bihang/callback_secret');
       if($callbackSecret == "generate") {
         // Important to keep the callback URL a secret
         $callbackSecret = md5('secret_' . mt_rand());
-        Mage::getModel('core/config')->saveConfig('payment/Oklink/callback_secret', $callbackSecret)->cleanCache();
+        Mage::getModel('core/config')->saveConfig('payment/Bihang/callback_secret', $callbackSecret)->cleanCache();
         Mage::app()->getStore()->resetConfig();
       }
       
-      $successUrl = Mage::getStoreConfig('payment/Oklink/custom_success_url');
-      $cancelUrl = Mage::getStoreConfig('payment/Oklink/custom_cancel_url');
+      $successUrl = Mage::getStoreConfig('payment/Bihang/custom_success_url');
+      $cancelUrl = Mage::getStoreConfig('payment/Bihang/custom_cancel_url');
       if ($successUrl == false) {
-        $successUrl = Mage::getUrl('oklink_oklink'). 'redirect/success/';
+        $successUrl = Mage::getUrl('bihang_bihang'). 'redirect/success/';
       }
       if ($cancelUrl == false) {
-        $cancelUrl = Mage::getUrl('oklink_oklink'). 'redirect/cancel/';
+        $cancelUrl = Mage::getUrl('bihang_bihang'). 'redirect/cancel/';
       }
 
       $name = "Order #" . $order['increment_id'];
@@ -97,7 +97,7 @@ class Oklink_Oklink_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             'price' => $amount,
             'price_currency' => $currency,
             'custom'  => $custom,
-            'callback_url' => Mage::getUrl('oklink_oklink'). 'callback/callback/?secret=' . $callbackSecret,
+            'callback_url' => Mage::getUrl('bihang_bihang'). 'callback/callback/?secret=' . $callbackSecret,
             'success_url' => $successUrl,
           );
       // Generate the code
@@ -106,10 +106,10 @@ class Oklink_Oklink_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
       } catch (Exception $e) {
           throw new Exception("Could not generate checkout page. Double check your API Key and Secret. " . $e->getMessage());
       }
-      $redirectUrl = OklinkBase::WEB_BASE."merchant/mPayOrderStemp1.do?buttonid=".$button->id;
+      $redirectUrl = BihangBase::WEB_BASE."merchant/mPayOrderStemp1.do?buttonid=".$button->id;
 
       // Step 2: Redirect customer to payment page
-      $payment->setIsTransactionPending(true); // Set status to Payment Review while waiting for Oklink postback
+      $payment->setIsTransactionPending(true); // Set status to Payment Review while waiting for Bihang postback
       Mage::getSingleton('customer/session')->setRedirectUrl($redirectUrl);
       
       return $this;

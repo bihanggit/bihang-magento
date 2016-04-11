@@ -3,13 +3,13 @@
    <sections>
 		<payment>
 			<groups>
-				<Oklink translate="label" module="paygate">
-					<label>Oklink</label>
+				<Bihang translate="label" module="paygate">
+					<label>Bihang</label>
 					<sort_order>700</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>0</show_in_store>
-                    <comment><![CDATA[<b>Setup Instructions:</b><br><ol><li>Go to <a href="https://oklink.com/apiKey/index.do">https://oklink.com/apiKey/index</a> and click '+ New API Key' to generate an API Key and Secret for this plugin. You should create a 'HMAC' key with the permission 'merchant' only.</li><li>After generating the API key, click on the shortened representation of it (looks like 'kcyPDdpjgYk...') to view the full API Key + Secret.</li><li>Copy and paste the API Key and API Secret into the boxes below, and save the plugin settings.</li><li><b>After generating an API key, remember to enable it on the <a href="https:/oklink.com/apiKey/index.do">https://oklink.com/apiKey/index</a> page! If the API Key is not enabled, the plugin will not work.</b><li></ol>]]></comment>
+                    <comment><![CDATA[<b>Setup Instructions:</b><br><ol><li>Go to <a href="https://bihang.com/apiKey/index.do">https://bihang.com/apiKey/index</a> and click '+ New API Key' to generate an API Key and Secret for this plugin. You should create a 'HMAC' key with the permission 'merchant' only.</li><li>After generating the API key, click on the shortened representation of it (looks like 'kcyPDdpjgYk...') to view the full API Key + Secret.</li><li>Copy and paste the API Key and API Secret into the boxes below, and save the plugin settings.</li><li><b>After generating an API key, remember to enable it on the <a href="https:/bihang.com/apiKey/index.do">https://bihang.com/apiKey/index</a> page! If the API Key is not enabled, the plugin will not work.</b><li></ol>]]></comment>
 					<fields>
 						<active translate="label">
 							<label>Enabled</label>
@@ -55,7 +55,7 @@
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>0</show_in_store>
-							<comment>Customize the order of the Oklink plugin relative to other payment plugins.</comment>
+							<comment>Customize the order of the Bihang plugin relative to other payment plugins.</comment>
 						</sort_order>
 						
 						<custom_success_url translate="label">
@@ -77,7 +77,7 @@
 							<comment>Optional - use these settings to override the default success and cancel URLs if you are using a custom checkout module. Most users should not have to change these settings.</comment>
 						</custom_cancel_url>
 					</fields>
-				</Oklink>
+				</Bihang>
 			</groups>
 		</payment>
 	</sections>
